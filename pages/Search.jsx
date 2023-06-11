@@ -10,7 +10,7 @@ export default function (props) {
 	return (
 		<>
 			<h3
-				className="flex items-center gap-1 w-full"
+				className="flex items-center gap-1 w-full cursor-pointer"
 				onClick={(e) => props.setShowSearch(false)}
 			>
 				<CaretLeft size={22} weight="light" />
