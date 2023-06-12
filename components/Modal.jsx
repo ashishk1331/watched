@@ -8,6 +8,8 @@ export default function (props) {
 	const user = useStore((state) => state.user);
 	const setUser = useStore((state) => state.setUser);
 
+	console.log(user)
+
 	return (
 		<div className="fixed inset-0 w-screen h-screen bg-back/25 flex backdrop-blur">
 			<div className="m-auto flex flex-col items-center gap-6 bg-black rounded-md shadow p-6">

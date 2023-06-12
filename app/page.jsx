@@ -10,6 +10,8 @@ import { getSession } from "../util/useAppwrite";
 export default function () {
 	const [showSearch, setShowSearch] = useState(false);
 	const user = useStore((state) => state.user);
+	const collectionID = useStore((state) => state.collectionID);
+	const setCollectionID = useStore((state) => state.setCollectionID);
 	const setUser = useStore((state) => state.setUser);
 	const setLoading = useStore((state) => state.setLoading);
 
@@ -19,6 +21,20 @@ export default function () {
 			getSession()
 				.then((resp) => {
 					setUser(resp);
+					if (collectionID === null) {
+						(async function () {
+							let result = await fetch('/api/getCollectionID', {
+								method: 'POST',
+								body: JSON.stringify({
+									userName: resp['email'],
+									userID: resp['$id']
+								})
+							});
+							result = await result.json()
+							console.log(result)
+							setCollectionID(result.collectionID)
+						})();
+					}
 					setLoading(false);
 				})
 				.catch((err) => {
