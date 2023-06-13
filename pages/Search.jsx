@@ -1,9 +1,10 @@
 "use client";
 import { CaretLeft, MagnifyingGlass } from "@phosphor-icons/react";
+import { twMerge } from "tailwind-merge";
 import Button from "../components/Button";
 import Item from "../components/ListItem";
 import { useStore } from "../util/useStore";
-import { createDoc } from "../util/useAppwrite"
+import { createDoc } from "../util/useAppwrite";
 import { useState } from "react";
 
 async function searchMovie(query) {
@@ -18,16 +19,29 @@ async function searchMovie(query) {
 export default function (props) {
 	const addItem = useStore((state) => state.addItem);
 	const [results, setResults] = useState([]);
+	const [isSearching, setIsSearching] = useState(false);
+
+	let timerID = null;
 
 	async function handleSubmit(event) {
 		event.preventDefault();
 
-		let { query } = event.target;
-		query = query.value.trim();
+		if(timerID){
+			clearTimeout(timerID)
+		}
+		timerID = setTimeout(async () => {
+			setIsSearching(true);
+			console.log("searchin");
 
-		let data = await searchMovie(query);
+			let { query } = event.target;
+			query = query.value.trim();
 
-		setResults(data.results);
+			let data = await searchMovie(query);
+
+			setResults(data.results);
+			setIsSearching(false);
+
+		}, 600)
 	}
 
 	return (
@@ -50,7 +64,7 @@ export default function (props) {
 					name="query"
 					className="w-full p-3 rounded-full bg-back border-2 border-gray-800"
 				/>
-				<Button>
+				<Button className={twMerge(isSearching && 'bg-gray-600')}>
 					<MagnifyingGlass size={22} color="black" />
 				</Button>
 			</form>
@@ -67,8 +81,8 @@ export default function (props) {
 						search
 						onClick={(e) => {
 							addItem(item);
-							props.setShowSearch(false)	
-							createDoc(item)
+							props.setShowSearch(false);
+							createDoc(item);
 						}}
 					/>
 				))}

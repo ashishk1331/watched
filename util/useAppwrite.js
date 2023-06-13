@@ -50,11 +50,13 @@ export async function logOut() {
 export function createDoc(data) {
     const COLLECTION_ID = useStore.getState().user['$id'];
 
+    const { genre_ids, ...refinedData } = data
+
     const promise = databases.createDocument(
         DATABASE_ID,
         COLLECTION_ID,
         ID.unique(),
-        data
+        refinedData
     );
 
     promise.then(
@@ -69,12 +71,12 @@ export function createDoc(data) {
 
 export function listDoc() {
     const COLLECTION_ID = useStore.getState().user['$id'];
-
+    const { updateCollection } = useStore.getState()
     const promise = databases.listDocuments(DATABASE_ID, COLLECTION_ID);
 
     promise.then(
         function (response) {
-            console.log(response); // Success
+            updateCollection(response.documents)
         },
         function (error) {
             console.log(error); // Failure

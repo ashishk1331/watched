@@ -5,7 +5,7 @@ import Login from "../pages/Login";
 
 import { useState, useEffect } from "react";
 import { useStore } from "../util/useStore";
-import { getSession } from "../util/useAppwrite";
+import { getSession, listDoc } from "../util/useAppwrite";
 
 export default function () {
 	const [showSearch, setShowSearch] = useState(false);
@@ -35,12 +35,15 @@ export default function () {
 							setCollectionID(result.collectionID)
 						})();
 					}
+					listDoc()
 					setLoading(false);
 				})
 				.catch((err) => {
 					console.log(err);
 					setLoading(false);
 				});
+		} else {
+			listDoc()
 		}
 	}, []);
 

@@ -13,6 +13,6 @@ export const useStore = create((set) => ({
 
 	// collection data
 	collection: [],
-	addItem: (item) => set((prev) => ({ collection: [item, ...prev.collection] })),
-	updateCollection: (collection) => set((prev) => ({ collection }), true),
+	addItem: (item) => set((prev) => ({ collection: [...prev.collection, item] })),
+	updateCollection: (collection) => set((prev) => ({ collection })),
 }));
